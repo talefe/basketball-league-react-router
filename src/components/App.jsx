@@ -5,7 +5,6 @@ import Players from './players';
 import Teams from './teams';
 import Navbar from './navbar';
 
-// eslint-disable-next-line react/prefer-stateless-function
 class App extends Component {
   render() {
     return (
