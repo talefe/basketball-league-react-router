@@ -5,6 +5,7 @@ import Players from './players';
 import Teams from './teams';
 import Navbar from './navbar';
 import TeamPage from './team-page';
+import Articles from './articles';
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
             <Route path="/players" component={Players} />
             <Route path="/teams" component={Teams} />
             <Route path="/:teamId" exact component={TeamPage} />
+            <Route path="/:teamId/articles" component={Articles} />
             <Route render={() => <h1 className="text-center">Four oh Four...</h1>} />
           </Switch>
         </div>
