@@ -1,36 +1,18 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 
-export default class Loading extends Component {
-  static propTypes = {
-    text: PropTypes.string.isRequired
-  };
+export default function Loading({ text = 'Loading', delay = 300 }) {
+  const [textToShow, setTextToShow] = useState(text);
 
-  static defaultProps = {
-    text: 'Loading'
-  };
-  state = {
-    text: this.props.text
-  };
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTextToShow(textToShow => (textToShow === `${text}...` ? text : `${textToShow}.`));
+    }, delay);
+    return () => clearInterval(id);
+  }, [delay, text]);
 
-  componentDidMount() {
-    const stopper = `${this.props.text}...`;
-    this.interval = setInterval(() => {
-      this.state.text === stopper
-        ? this.setState({ text: this.props.text })
-        : this.setState(({ text }) => ({ text: `${text}.` }));
-    }, 300);
-  }
-
-  componentWillUnmount() {
-    window.clearInterval(this.interval);
-  }
-
-  render() {
-    return (
-      <div className="container">
-        <p className="text-center">{this.state.text}</p>
-      </div>
-    );
-  }
+  return (
+    <div className="container">
+      <p className="text-center">{textToShow}</p>
+    </div>
+  );
 }

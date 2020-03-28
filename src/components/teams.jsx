@@ -1,70 +1,65 @@
-import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
-import TeamLogo from './team-logo';
+import React, { useReducer, useEffect } from 'react';
+import { Route, useLocation, useRouteMatch } from 'react-router-dom';
 import Sidebar from './sidebar';
 import { getTeamNames } from '../api';
 import Team from './team';
 import Loading from './loading';
 
-export default class Teams extends Component {
-  state = {
-    teamNames: [],
-    loading: true
-  };
-
-  componentDidMount() {
-    getTeamNames().then(teamNames =>
-      this.setState({
-        loading: false,
-        teamNames
-      })
-    );
+function teamsReducer(state, action) {
+  if (action.type === 'success') {
+    return {
+      teamNames: action.teamNames,
+      loading: false,
+      error: null
+    };
+  } else if (action.type === 'error') {
+    return {
+      ...state,
+      error: action.error,
+      loading: false
+    };
+  } else {
+    throw new Error('Action type not supported');
   }
-  render() {
-    const { teamNames, loading } = this.state;
-    const { match, location } = this.props;
+}
 
-    return (
-      <div className="container two-column">
-        <Sidebar loading={loading} title="Teams" list={teamNames} {...this.props} />
-        {loading === false && location.pathname === '/teams' ? (
-          <div className="sidebar-instruction">Select a team</div>
-        ) : null}
+export default function Teams() {
+  const location = useLocation();
+  const match = useRouteMatch({ path: `/teams` });
 
-        <Route
-          path={`${match.url}/:teamId`}
-          render={({ match }) => (
-            <div className="panel">
-              <Team id={match.params.teamId}>
-                {team =>
-                  team === null ? (
-                    <Loading />
-                  ) : (
-                    <div style={{ width: '100%' }}>
-                      <TeamLogo id={team.id} className="center" />
-                      <h1 className="medium-header">{team.name}</h1>
-                      <ul className="info-list row">
-                        <li>
-                          Established<div>{team.established}</div>
-                        </li>
-                        <li>
-                          Manager<div>{team.manager}</div>
-                        </li>
-                        <li>
-                          Coach<div>{team.coach}</div>
-                        </li>
-                      </ul>
-                      <Link className="center btn-main" to={`/${match.params.teamId}`}>
-                        {team.name} Team Page
-                      </Link>
-                    </div>
-                  )
-                }
-              </Team>
-            </div>
-          )}
-        />
-      </div>
-    );
-  }
+  const [state, dispatch] = useReducer(teamsReducer, { teamNames: [], loading: true });
+
+  useEffect(() => {
+    async function getNames() {
+      try {
+        let teamNames = await getTeamNames();
+        dispatch({ type: 'success', teamNames });
+      } catch (error) {
+        dispatch({ type: 'error', error });
+      }
+    }
+    getNames();
+  }, []);
+
+  return (
+    <div className="container two-column">
+      <Sidebar
+        loading={state.loading}
+        title="Teams"
+        list={state.teamNames}
+        match={match}
+        location={location}
+      />
+
+      {state.loading === false && location.pathname === '/teams' ? (
+        <div className="sidebar-instruction">Select a team</div>
+      ) : null}
+
+      {state.loading && <Loading />}
+
+      <Route path={`${match.url}/:teamId`}>
+        <Team />
+      </Route>
+    </div>
+  );
 }
