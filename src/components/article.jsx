@@ -1,36 +1,29 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { getArticle } from '../api';
+import useFetch from '../hooks/useFetch';
+import Loading from './loading';
 
-export default class Article extends Component {
-  static propTypes = {
-    teamId: PropTypes.string.isRequired,
-    articleId: PropTypes.string.isRequired,
-    children: PropTypes.func.isRequired
-  };
+export default function Article() {
+  const { data: article, loading, error } = useFetch(getArticle);
 
-  state = {
-    article: null
-  };
-  fetchArticle = (teamId, articleId) => {
-    this.setState({ article: null });
+  if (error) {
+    console.warn(error);
+    return <Redirect to="/" />;
+  }
 
-    getArticle(teamId, articleId).then(article =>
-      this.setState({
-        article
-      })
-    );
-  };
-  componentDidMount() {
-    const { teamId, articleId } = this.props;
-    this.fetchArticle(teamId, articleId);
+  if (loading) {
+    return <Loading text="Loading article" />;
   }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.articleId !== nextProps.articleId) {
-      this.fetchArticle(nextProps.teamId, nextProps.articleId);
-    }
-  }
-  render() {
-    return this.props.children(this.state.article);
-  }
+
+  const { id, title, body } = article;
+
+  return (
+    <div className="panel">
+      <article className="article" key={id}>
+        <h1 className="header">{title}</h1>
+        <p>{body}</p>
+      </article>
+    </div>
+  );
 }

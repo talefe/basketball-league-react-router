@@ -4,7 +4,7 @@ let cachedPlayers = null;
 let cachedTeams = {};
 let cachedTeamNames = null;
 
-export function getPlayers(teamId) {
+export function getPlayers({ teamId }) {
   return new Promise(res => {
     if (cachedPlayers === null) {
       cachedPlayers = players;
@@ -15,7 +15,7 @@ export function getPlayers(teamId) {
   });
 }
 
-export function getTeam(teamId) {
+export function getTeam({ teamId }) {
   return new Promise(res => {
     if (typeof cachedTeams[teamId] === 'undefined') {
       cachedTeams[teamId] = teams[teamId];
@@ -37,13 +37,14 @@ export function getTeamNames() {
   });
 }
 
-export function getArticle(teamId, id) {
+export function getArticle({ teamId, articleId }) {
+  console.log('HERE', teamId, articleId);
   return new Promise(res => {
-    setTimeout(() => res(generateArticle(teamId, id)), 700);
+    setTimeout(() => res(generateArticle(teamId, articleId)), 700);
   });
 }
 
-export function getTeamsArticles(teamId) {
+export function getTeamsArticles({ teamId }) {
   return new Promise(res => {
     setTimeout(() => res(generateTeamsArticles(teamId)), 700);
   });

@@ -1,36 +1,41 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { getTeam } from '../api';
+import useFetch from '../hooks/useFetch';
 import TeamLogo from './team-logo';
+import Loading from './loading';
 
 export default function Team() {
-  let { teamId } = useParams();
-  const [team, setTeam] = useState({});
+  const { data: team, loading, error } = useFetch(getTeam);
 
-  useEffect(() => {
-    (async function() {
-      const team = await getTeam(teamId);
-      setTeam(team);
-    })();
-  }, [teamId]);
+  if (error) {
+    console.warn(error);
+    return <Redirect to="/" />;
+  }
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  const { name, id, established, manager, coach } = team;
 
   return (
     <div style={{ width: '100%' }}>
-      <TeamLogo id={teamId} className="center" />
-      <h1 className="medium-header">{team.name}</h1>
+      <TeamLogo id={id} className="center" />
+      <h1 className="medium-header">{name}</h1>
       <ul className="info-list row">
         <li>
-          Established<div>{team.established}</div>
+          Established<div>{established}</div>
         </li>
         <li>
-          Manager<div>{team.manager}</div>
+          Manager<div>{manager}</div>
         </li>
         <li>
-          Coach<div>{team.coach}</div>
+          Coach<div>{coach}</div>
         </li>
       </ul>
-      <Link className="center btn-main" to={`/${teamId}`}>
-        {team.name} Team Page
+      <Link className="center btn-main" to={`/${id}`}>
+        {name} Team Page
       </Link>
     </div>
   );

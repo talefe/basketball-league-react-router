@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import TeamLogo from './team-logo';
 import { getTeamNames } from '../api';
+import Loading from './loading';
+import useFetch from '../hooks/useFetch';
 
 export default function Home() {
-  const [teamNames, setTeamNames] = useState([]);
+  const { data: teamNames, loading, error } = useFetch(getTeamNames);
 
-  useEffect(() => {
-    (async function() {
-      try {
-        const names = await getTeamNames();
-        setTeamNames(names);
-      } catch (error) {
-        console.warn(error);
-      }
-    })();
-  }, [teamNames]);
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (loading) {
+    return <Loading text="Loading Home" />;
+  }
 
   return (
     <div className="container">

@@ -1,67 +1,40 @@
-import React, { useReducer, useEffect } from 'react';
+import React from 'react';
 import { Link, Route, useParams, useLocation, useRouteMatch } from 'react-router-dom';
 import Sidebar from './sidebar';
 import { getPlayers } from '../api';
-import { parse } from 'query-string';
 import slug from 'slug';
 import Loading from './loading';
-
-function playersReducer(state, action) {
-  if (action.type === 'success') {
-    return {
-      loading: false,
-      players: action.players,
-      error: null
-    };
-  } else if (action.type === 'error') {
-    return {
-      ...state,
-      loading: false,
-      error: action.error
-    };
-  } else {
-    throw new Error('Action type not supported');
-  }
-}
+import useFetch from '../hooks/useFetch';
 
 export default function Players() {
   const location = useLocation();
   const match = useRouteMatch({ path: `/players` });
+  const { data: players, loading, error } = useFetch(getPlayers);
 
-  const [state, dispatch] = useReducer(playersReducer, {
-    players: [],
-    loading: true
-  });
+  if (error) {
+    return <p>{error}</p>;
+  }
 
-  useEffect(() => {
-    async function fetchPlayers(teamId) {
-      try {
-        let players = await getPlayers(teamId);
-        dispatch({ type: 'success', players });
-      } catch (error) {
-        dispatch({ type: 'error', error });
-      }
-    }
-    location.search ? fetchPlayers(parse(location.search).teamId) : fetchPlayers();
-  }, [location]);
+  if (!players) {
+    return <Loading />;
+  }
 
   return (
     <div className="container two-column">
       <Sidebar
-        loading={state.loading}
+        loading={loading}
         title="Players"
-        list={state.players.map(player => player.name)}
+        list={players.map(player => player.name)}
         match={match}
         location={location}
       />
 
-      {state.loading === false && location.pathname === '/players' ? (
+      {location.pathname === match.path ? (
         <div className="sidebar-instruction">Select a player</div>
       ) : null}
-      {state.loading && <Loading />}
 
       <Route path={`${match.url}/:playerId`}>
-        <Player players={state.players} />
+        <Player players={players} />
       </Route>
     </div>
   );
