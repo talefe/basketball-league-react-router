@@ -30,15 +30,14 @@ export default function Teams() {
   const [state, dispatch] = useReducer(teamsReducer, { teamNames: [], loading: true });
 
   useEffect(() => {
-    async function getNames() {
+    (async function() {
       try {
         let teamNames = await getTeamNames();
         dispatch({ type: 'success', teamNames });
       } catch (error) {
         dispatch({ type: 'error', error });
       }
-    }
-    getNames();
+    })();
   }, []);
 
   return (

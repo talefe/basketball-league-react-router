@@ -7,14 +7,11 @@ export default function Team() {
   let { teamId } = useParams();
   const [team, setTeam] = useState({});
 
-  console.log(teamId);
-
   useEffect(() => {
-    async function findTeam() {
+    (async function() {
       const team = await getTeam(teamId);
       setTeam(team);
-    }
-    findTeam();
+    })();
   }, [teamId]);
 
   return (

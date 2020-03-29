@@ -7,15 +7,14 @@ export default function Home() {
   const [teamNames, setTeamNames] = useState([]);
 
   useEffect(() => {
-    async function doIt() {
+    (async function() {
       try {
         const names = await getTeamNames();
         setTeamNames(names);
       } catch (error) {
         console.warn(error);
       }
-    }
-    doIt();
+    })();
   }, [teamNames]);
 
   return (
