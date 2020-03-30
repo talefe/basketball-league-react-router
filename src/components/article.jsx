@@ -1,11 +1,11 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { getArticle } from '../api';
+import {Redirect} from 'react-router-dom';
+import {getArticle} from '../api';
 import useFetch from '../hooks/useFetch';
 import Loading from './loading';
 
 export default function Article() {
-  const { data: article, loading, error } = useFetch(getArticle);
+  const {data: article, loading, error} = useFetch(getArticle);
 
   if (error) {
     console.warn(error);
@@ -16,7 +16,7 @@ export default function Article() {
     return <Loading text="Loading article" />;
   }
 
-  const { id, title, body } = article;
+  const {id, title, body} = article;
 
   return (
     <div className="panel">

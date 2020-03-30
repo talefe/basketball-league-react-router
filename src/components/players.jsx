@@ -1,15 +1,22 @@
 import React from 'react';
-import { Link, Route, useParams, useLocation, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  useParams,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 import Sidebar from './sidebar';
-import { getPlayers } from '../api';
+import {getPlayers} from '../api';
 import slug from 'slug';
 import Loading from './loading';
 import useFetch from '../hooks/useFetch';
+import PropTypes from 'prop-types';
 
 export default function Players() {
   const location = useLocation();
-  const match = useRouteMatch({ path: `/players` });
-  const { data: players, loading, error } = useFetch(getPlayers);
+  const match = useRouteMatch({path: `/players`});
+  const {data: players, loading, error} = useFetch(getPlayers);
 
   if (error) {
     return <p>{error}</p>;
@@ -40,12 +47,20 @@ export default function Players() {
   );
 }
 
-function Player({ players }) {
-  let { playerId } = useParams();
+function Player({players}) {
+  let {playerId} = useParams();
 
-  const { name, position, teamId, number, avatar, apg, ppg, rpg, spg } = players.find(
-    player => slug(player.name) === playerId
-  );
+  const {
+    name,
+    position,
+    teamId,
+    number,
+    avatar,
+    apg,
+    ppg,
+    rpg,
+    spg,
+  } = players.find(player => slug(player.name) === playerId);
 
   return (
     <div className="panel">
@@ -53,11 +68,11 @@ function Player({ players }) {
       <h1 className="medium-header">{name}</h1>
       <h3 className="header">#{number}</h3>
       <div className="row">
-        <ul className="info-list" style={{ marginRight: 80 }}>
+        <ul className="info-list" style={{marginRight: 80}}>
           <li>
             Team
             <div>
-              <Link style={{ color: '#68809a' }} to={`/${teamId}`}>
+              <Link style={{color: '#68809a'}} to={`/${teamId}`}>
                 {teamId[0].toUpperCase() + teamId.slice(1)}
               </Link>
             </div>
@@ -84,3 +99,7 @@ function Player({ players }) {
     </div>
   );
 }
+
+Player.propTypes = {
+  players: PropTypes.object,
+};

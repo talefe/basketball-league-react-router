@@ -1,12 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import TeamLogo from './team-logo';
-import { getTeamNames } from '../api';
+import {getTeamNames} from '../api';
 import Loading from './loading';
 import useFetch from '../hooks/useFetch';
 
 export default function Home() {
-  const { data: teamNames, loading, error } = useFetch(getTeamNames);
+  const {data: teamNames, loading, error} = useFetch(getTeamNames);
 
   if (error) {
     return <p>{error}</p>;

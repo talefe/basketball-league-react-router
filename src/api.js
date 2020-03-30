@@ -1,21 +1,29 @@
-import { teams, players, generateArticle, generateTeamsArticles } from './dummy-data';
+import {
+  teams,
+  players,
+  generateArticle,
+  generateTeamsArticles,
+} from './dummy-data';
 
 let cachedPlayers = null;
 let cachedTeams = {};
 let cachedTeamNames = null;
 
-export function getPlayers({ teamId }) {
+export function getPlayers({teamId}) {
   return new Promise(res => {
     if (cachedPlayers === null) {
       cachedPlayers = players;
-      return setTimeout(() => res(teamId ? teams[teamId].players : cachedPlayers), 800);
+      return setTimeout(
+        () => res(teamId ? teams[teamId].players : cachedPlayers),
+        800,
+      );
     }
 
     return res(teamId ? teams[teamId].players : cachedPlayers);
   });
 }
 
-export function getTeam({ teamId }) {
+export function getTeam({teamId}) {
   return new Promise(res => {
     if (typeof cachedTeams[teamId] === 'undefined') {
       cachedTeams[teamId] = teams[teamId];
@@ -37,14 +45,13 @@ export function getTeamNames() {
   });
 }
 
-export function getArticle({ teamId, articleId }) {
-  console.log('HERE', teamId, articleId);
+export function getArticle({teamId, articleId}) {
   return new Promise(res => {
     setTimeout(() => res(generateArticle(teamId, articleId)), 700);
   });
 }
 
-export function getTeamsArticles({ teamId }) {
+export function getTeamsArticles({teamId}) {
   return new Promise(res => {
     setTimeout(() => res(generateTeamsArticles(teamId)), 700);
   });

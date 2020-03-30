@@ -1,16 +1,16 @@
 import React from 'react';
-import { Route, useLocation, useRouteMatch, Redirect } from 'react-router-dom';
+import {Route, useLocation, useRouteMatch, Redirect} from 'react-router-dom';
 import Sidebar from './sidebar';
-import { getTeamsArticles } from '../api';
+import {getTeamsArticles} from '../api';
 import Article from './article';
 import Loading from './loading';
 import useFetch from '../hooks/useFetch';
 
 export default function Articles() {
   const location = useLocation();
-  const match = useRouteMatch({ path: `/:teamId/articles` });
+  const match = useRouteMatch({path: `/:teamId/articles`});
 
-  const { data: articles, loading, error } = useFetch(getTeamsArticles);
+  const {data: articles, loading, error} = useFetch(getTeamsArticles);
 
   if (error) {
     console.warn(error);
@@ -26,7 +26,7 @@ export default function Articles() {
       <Sidebar
         loading={loading}
         title="Articles"
-        list={articles.map(({ title }) => title)}
+        list={articles.map(({title}) => title)}
         match={match}
         location={location}
       />
