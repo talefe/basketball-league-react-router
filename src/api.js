@@ -1,4 +1,9 @@
-import { teams, players, generateArticle, generateTeamsArticles } from './dummy-data';
+import {
+  teams,
+  players,
+  generateArticle,
+  generateTeamsArticles,
+} from './dummy-data';
 
 let cachedPlayers = null;
 let cachedTeams = {};
@@ -8,7 +13,10 @@ export function getPlayers({ teamId }) {
   return new Promise(res => {
     if (cachedPlayers === null) {
       cachedPlayers = players;
-      return setTimeout(() => res(teamId ? teams[teamId].players : cachedPlayers), 800);
+      return setTimeout(
+        () => res(teamId ? teams[teamId].players : cachedPlayers),
+        800,
+      );
     }
 
     return res(teamId ? teams[teamId].players : cachedPlayers);
@@ -38,7 +46,6 @@ export function getTeamNames() {
 }
 
 export function getArticle({ teamId, articleId }) {
-  console.log('HERE', teamId, articleId);
   return new Promise(res => {
     setTimeout(() => res(generateArticle(teamId, articleId)), 700);
   });

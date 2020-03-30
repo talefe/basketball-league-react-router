@@ -30,9 +30,9 @@ export default function Articles() {
         match={match}
         location={location}
       />
-      {loading === false && location.pathname === match.path ? (
+      {location.pathname === match.url && (
         <div className="sidebar-instruction">Select an article</div>
-      ) : null}
+      )}
       <Route path={`${match.path}/:articleId`}>
         <Article />
       </Route>

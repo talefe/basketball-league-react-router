@@ -1,36 +1,47 @@
 {
+  "main": "index.js",
   "name": "react-router-project",
-  "version": "0.1.0",
+  "description": "A project to learn react router and hooks",
+  "author": "Sara Talefe (https://github.com/talefe)",
+  "license": "ISC",
   "private": true,
-  "dependencies": {
-    "prop-types": "^15.7.2",
-    "query-string": "^6.9.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.0",
-    "slug": "^1.1.0"
-  },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.js src/**/*.jsx"
+    "build": "babel src --out-dir dist",
+    "lint": "eslint --ignore-path .gitignore .",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|jsx)\"",
+    "format": "npm run prettier -- --write",
+    "check-format": "npm run prettier -- --list-different",
+    "validate": "npm run check-format && npm run lint && npm run build"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.9.4",
+    "babel-preset-react": "^6.24.1",
+    "prop-types": "^15.7.2",
+    "query-string": "^6.11.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.3.0",
+    "slug": "^2.1.1"
   },
   "devDependencies": {
-    "eslint": "^6.7.2",
-    "eslint-config-airbnb": "^18.0.1",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
     "eslint-config-node": "^4.0.0",
-    "eslint-config-prettier": "^6.7.0",
-    "eslint-plugin-import": "^2.19.1",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.17.0",
-    "eslint-plugin-react-hooks": "^1.7.0",
-    "husky": "^3.1.0",
-    "prettier": "^1.19.1"
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^3.0.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.0",
+    "prettier": "^2.0.2"
   },
   "browserslist": {
     "production": [

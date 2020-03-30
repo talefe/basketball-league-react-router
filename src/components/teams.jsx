@@ -22,7 +22,13 @@ export default function Teams() {
 
   return (
     <div className="container two-column">
-      <Sidebar loading={loading} title="Teams" list={teamNames} match={match} location={location} />
+      <Sidebar
+        loading={loading}
+        title="Teams"
+        list={teamNames}
+        match={match}
+        location={location}
+      />
 
       {loading === false && location.pathname === match.path ? (
         <div className="sidebar-instruction">Select a team</div>

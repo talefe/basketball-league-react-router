@@ -1,28 +1,28 @@
 import React from 'react';
 import { Link, Redirect, useRouteMatch, useParams } from 'react-router-dom';
 import TeamLogo from './team-logo';
-import { getTeamsArticles, getTeamNames, getTeam } from '../api';
+import { getTeamsArticles, getTeam } from '../api';
 import slug from 'slug';
 import Loading from './loading';
 import useFetch from '../hooks/useFetch';
 
 export default function TeamPage() {
-  const { data: team, error: teamError } = useFetch(getTeam);
-  const { data: teamNames, loading: teamNamesLoading } = useFetch(getTeamNames);
-  const { data: articles } = useFetch(getTeamsArticles);
+  const { data: team, loading: teamLoading, error: teamError } = useFetch(
+    getTeam,
+  );
+  const { data: articles, loading: articlesLoading } = useFetch(
+    getTeamsArticles,
+  );
 
   const match = useRouteMatch({ path: '/:teamId' });
   const { teamId } = useParams();
 
-  if (teamError) {
-    return <p>{teamError}</p>;
+  if (teamLoading) {
+    return <Loading />;
   }
 
-  if (!teamNamesLoading && !teamNames.includes(teamId)) {
+  if (teamError) {
     return <Redirect to="/" />;
-  }
-  if (!team) {
-    return <Loading />;
   }
 
   return (
@@ -59,17 +59,23 @@ export default function TeamPage() {
           </div>
         </li>
       </ul>
-      <h2 className="header">Articles</h2>
-      <ul className="articles">
-        {articles.map(article => (
-          <li key={article.id}>
-            <Link to={`${match.url}/articles/${slug(article.title)}`}>
-              <h4 className="article-title">{article.title}</h4>
-              <div className="article-date">{article.date.toLocaleDateString()}</div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {!articlesLoading && (
+        <div>
+          <h2 className="header">Articles</h2>
+          <ul className="articles">
+            {articles.map(article => (
+              <li key={article.id}>
+                <Link to={`${match.url}/articles/${slug(article.title)}`}>
+                  <h4 className="article-title">{article.title}</h4>
+                  <div className="article-date">
+                    {article.date.toLocaleDateString()}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

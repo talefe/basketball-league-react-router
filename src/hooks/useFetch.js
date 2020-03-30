@@ -8,13 +8,13 @@ function dataReducer(state, action) {
       ...state,
       loading: false,
       error: null,
-      data: action.payload
+      data: action.payload,
     };
   } else if (action.type === 'error') {
     return {
       loading: false,
       error: action.payload,
-      data: null
+      data: null,
     };
   } else {
     throw new Error('Action type not supported');
@@ -25,19 +25,19 @@ export default function useFetch(request) {
   const [state, dispatch] = useReducer(dataReducer, {
     loading: true,
     data: null,
-    error: null
+    error: null,
   });
 
   const params = useParams();
   const { search } = useLocation();
 
-  console.log('PARAMS', params);
-
   useEffect(() => {
     let isSubscribed = true;
-    (async function() {
+    (async function () {
       try {
-        const data = await request((search && { ...parse(search) }) || (params && { ...params }));
+        const data = await request(
+          (search && { ...parse(search) }) || (params && { ...params }),
+        );
         if (isSubscribed) {
           dispatch({ type: 'success', payload: data });
         }

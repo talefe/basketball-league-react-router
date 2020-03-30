@@ -1,10 +1,17 @@
 import React from 'react';
-import { Link, Route, useParams, useLocation, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  useParams,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 import Sidebar from './sidebar';
 import { getPlayers } from '../api';
 import slug from 'slug';
 import Loading from './loading';
 import useFetch from '../hooks/useFetch';
+import PropTypes from 'prop-types';
 
 export default function Players() {
   const location = useLocation();
@@ -43,9 +50,17 @@ export default function Players() {
 function Player({ players }) {
   let { playerId } = useParams();
 
-  const { name, position, teamId, number, avatar, apg, ppg, rpg, spg } = players.find(
-    player => slug(player.name) === playerId
-  );
+  const {
+    name,
+    position,
+    teamId,
+    number,
+    avatar,
+    apg,
+    ppg,
+    rpg,
+    spg,
+  } = players.find(player => slug(player.name) === playerId);
 
   return (
     <div className="panel">
@@ -84,3 +99,7 @@ function Player({ players }) {
     </div>
   );
 }
+
+Player.propTypes = {
+  players: PropTypes.object,
+};
