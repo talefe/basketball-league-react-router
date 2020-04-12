@@ -101,5 +101,5 @@ function Player({ players }) {
 }
 
 Player.propTypes = {
-  players: PropTypes.object,
+  players: PropTypes.array.isRequired,
 };

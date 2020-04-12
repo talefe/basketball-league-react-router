@@ -21,6 +21,7 @@
     "query-string": "^6.11.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-imported-component": "^6.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
     "slug": "^2.1.1"
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
